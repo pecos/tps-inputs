@@ -1,0 +1,7 @@
+This case corresponds to an axisymmetric argon plasma torch with 2.5
+kW input plasma power.  It uses a single, reversible ionization
+reaction.  The case was restarted from an LTE simulation (using the
+`restartFromLTE = True` option) and then run for 5000 steps at cfl =
+0.025, in order to march through a fast initial transient when the
+reactions are turned on.  After that, the cfl was set to 0.1 and it
+was run another 5000 steps to generate the restart file included here.
