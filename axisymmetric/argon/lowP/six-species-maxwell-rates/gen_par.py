@@ -1,11 +1,12 @@
 import configparser
-output_folder = "par_ss"
+output_folder = "./"
 base_file     = "plasma.6sp.tps2boltzmann.ini"
 lxcat_path    = "/scratch/03727/tg830270/tps_apptainer/tps/boltzmann/BESolver/python/lxcat_data/eAr_crs.6sp_Tg_0.5eV" 
 sub_clusters  = [2048, 1024, 512, 256, 128]
 node_count    = [1, 2, 4, 8, 16]
 
 config = configparser.ConfigParser()
+config.optionxform=str
 config.read(base_file)
 config["boltzmannSolver"]["collisions"]=lxcat_path
 for i in range(len(sub_clusters)):
