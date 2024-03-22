@@ -3,6 +3,8 @@ import configparser
 import argparse
 
 parser = argparse.ArgumentParser()
+parser.add_argument("-input_folder"  , "--input_folder"            , help="input folder for tps-bte param files",  type=str, default="./")
+parser.add_argument("-par_fname"     , "--par_fname"               , help="par base file file name for the qois", type=str)
 parser.add_argument("-output_folder" , "--output_folder"           , help="output folder for tps-bte param files", type=str, default="./")
 parser.add_argument("-ngpus_per_node", "--ngpus_per_node"          , help="GPUs per node", type=int, default=4)
 parser.add_argument("-solver_type"   , "--solver_type"             , help="solver type", type=str, default="steady-state")
@@ -14,7 +16,7 @@ parser.add_argument("-node_count"    , "--node_count"              , help="sub c
 args = parser.parse_args()
 
 output_folder = args.output_folder
-base_file     = "plasma.6sp.tps2boltzmann.ini"
+base_file     = args.input_folder + "/" +args.par_fname
 lxcat_path    = args.lxcat
 sub_clusters  = args.sub_clusters
 node_count    = args.node_count
@@ -31,7 +33,8 @@ config["gpu"]["numGpusPerRank"]           = str(args.ngpus_per_node)
 
 for i in range(len(sub_clusters)):
     config["boltzmannSolver"]["n_sub_clusters"] = str(sub_clusters[i])
-    with open (output_folder+"/plasma.6sp.tps2boltzmann_ss_%d.ini"%(node_count[i]),"w") as f:
+    out_par_base = ".".join(args.par_fname.split(".")[:-1])+".%d.ini"%(node_count[i])
+    with open (output_folder + out_par_base, "w") as f:
         config.write(f)
         f.close()
         
