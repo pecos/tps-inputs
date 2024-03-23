@@ -33,7 +33,7 @@ config["gpu"]["numGpusPerRank"]           = str(args.ngpus_per_node)
 
 for i in range(len(sub_clusters)):
     config["boltzmannSolver"]["n_sub_clusters"] = str(sub_clusters[i])
-    out_par_base = ".".join(args.par_fname.split(".")[:-1])+".%d.ini"%(node_count[i])
+    out_par_base = ".".join(args.par_fname.split(".")[:-1])+".%s.%d.ini"%(args.out_fname,node_count[i])
     with open (output_folder + out_par_base, "w") as f:
         config.write(f)
         f.close()
