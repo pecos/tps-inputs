@@ -26,6 +26,6 @@ srun singularity exec -B $FS_MOUNT:$CONTAINER_DIR \
      --env SLURM_JOB_ID=$SLURM_JOB_ID \
      -B /var/run/munge/:/var/run/munge/ \
      -B /etc/slurm:/etc/slurm \
-     $CONTAINER $RUNDIR/wrap.sh $EXE -run ../inputs/input.dtconst.cyl.perf.ini
+     $CONTAINER $RUNDIR/wrap.sh $EXE -run ../inputs/input.dtconst.cyl.perf.p3.ini
 
 status=$?

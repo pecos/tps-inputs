@@ -1,6 +1,6 @@
 #!/bin/bash
 
-number_of_nodes=("1" "2")
+number_of_nodes=("1" "2" "4" "8" "16" "32" "64" "128" "256" "512")
 
 echo "# (Number of nodes) t0 [sec] t1 [sec]"
 for nnode in ${number_of_nodes[@]}; do
