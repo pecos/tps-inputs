@@ -4,10 +4,19 @@ import pandas as pd
 import scipy.interpolate
 import h5py
 import scipy.constants
+import matplotlib
+matplotlib.rcParams.update({
+      #"font.family": "serif",
+      #"font.serif": [], # Use LaTeX default serif font.
+      "text.usetex": True, # use inline math for ticks   ## You can change the font size of individual items with:
+    #    "font.size": 14,
+    #    "axes.titlesize": 14,
+    #    "legend.fontsize": 14,
+    #    "axes.labelsize": 14,
+    })
 
 
-
-folder_name = "bte_rates"
+folder_name = "rate_bte"
 def compute_effective_ki(ki, ns_by_n0):
     return np.einsum("is,is->i", ki, ns_by_n0)
 
@@ -24,10 +33,10 @@ ki_arr     = scipy.interpolate.interp1d(d_arr[:,0], d_arr[:,1], bounds_error=Fal
 ki_max_3sp = scipy.interpolate.interp1d(d_arr[:,0], d_arr[:,2], bounds_error=False, fill_value=0)
 
 
-bte_data   = [[np.genfromtxt("%s/ss_Nr127_ee_0_grid_%02d_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)],
-              [np.genfromtxt("%s/ss_Nr127_ee_1_grid_%02d_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)],
-              [np.genfromtxt("%s/ts_Nr127_ee_0_grid_%02d_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)],
-              [np.genfromtxt("%s/ts_Nr127_ee_1_grid_%02d_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)],
+bte_data   = [[np.genfromtxt("%s/ss_ee_0_grid_%02d_rank_0_npes_1_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)],
+              [np.genfromtxt("%s/ss_ee_1_grid_%02d_rank_0_npes_1_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)],
+              [np.genfromtxt("%s/ts_ee_0_grid_%02d_rank_0_npes_1_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)],
+              [np.genfromtxt("%s/ts_ee_1_grid_%02d_rank_0_npes_1_qoi.csv"%(folder_name, i), delimiter=",", skip_header=True) for i in range(4)]
               ]
 
 bte_data_lbl = [r"Ar(6-SP) $E=E_0$", 
@@ -58,9 +67,9 @@ GRID_IDX = list(range(3,4))
 Tg1      = np.sort(np.unique(np.array([bte_data[0][grid_idx][:,TG_IDX] for grid_idx in GRID_IDX])))
 k_to_ev  = (scipy.constants.Boltzmann/scipy.constants.electron_volt)
 
-plt.figure(figsize=(10, 10), dpi=300)
+plt.figure(figsize=(6, 4))
 plt.plot(Tg1 * k_to_ev , ki_arr(Tg1)     , label=r"Arrhenius")
-plt.plot(Tg1 * k_to_ev , ki_max_3sp(Tg1) , label=r"Maxwellian(3-SP)")
+#plt.plot(Tg1 * k_to_ev , ki_max_3sp(Tg1) , label=r"Maxwellian(3-SP)")
 
 prop_cycle = plt.rcParams['axes.prop_cycle']
 colors     = prop_cycle.by_key()['color']
@@ -96,22 +105,24 @@ for grid_idx in GRID_IDX:
 plt.yscale("log")
 plt.xlabel(r"Temperature [eV]")
 plt.ylabel(r"reaction rate [$m^3s^{-1}$]")
-
 plt.grid(visible=True)
+plt.tight_layout()
+plt.savefig("%s.pgf"%(fname), format="pgf")
 plt.savefig("%s.png"%(fname))
 plt.close()
 
 
 for m_idx in range(0, len(bte_data)):
-    plt.figure(figsize=(10, 10), dpi=300)
+    plt.figure(figsize=(6, 4))
 
     g1_lbl = [r"$Ar \rightarrow  Ar_m$", r"$Ar \rightarrow Ar_r$", r"$Ar \rightarrow Ar_p$"]
     g2_lbl = [r"$Ar \rightarrow Ar^+$" , r"$Ar_m \rightarrow Ar^+$", r"$Ar_r \rightarrow Ar^+$", r"$Ar_p \rightarrow Ar^+$"]
 
-    for i in range(len(g1_lbl)):
-        plt.plot(Tg1 * k_to_ev, g1_tab[i](Tg1), color=colors[i] , label=g1_lbl[i])
-    for i in range(len(g2_lbl)):
-        plt.plot(Tg1 * k_to_ev, g2_tab[i](Tg1), color=colors[i + len(g1_lbl)], label=g2_lbl[i])
+    if m_idx < 2:
+        for i in range(len(g1_lbl)):
+            plt.plot(Tg1 * k_to_ev, g1_tab[i](Tg1), color=colors[i] , label=g1_lbl[i])
+        for i in range(len(g2_lbl)):
+            plt.plot(Tg1 * k_to_ev, g2_tab[i](Tg1), color=colors[i + len(g1_lbl)], label=g2_lbl[i])
     
     
     for grid_idx in GRID_IDX:
@@ -139,13 +150,15 @@ for m_idx in range(0, len(bte_data)):
             plt.plot(Tg * k_to_ev, ki_g2[m_idx][:, i], lw=0, marker='o', fillstyle='none', markersize=3, color=colors[i + len(g1_lbl)], label = g2_lbl[i])
         
         if grid_idx == GRID_IDX[0]:
-            plt.legend(ncol=2)
+            plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5), fancybox=True,ncol=1, fontsize=11)
         
     plt.yscale("log")
     plt.xlabel(r"Temperature [eV]")
     plt.ylabel(r"reaction rate [$m^3s^{-1}$]")
+    plt.tight_layout()
     
     plt.grid(visible=True)
+    plt.savefig("%s_model_%02d.pgf"%(fname, m_idx), format='pgf')
     plt.savefig("%s_model_%02d.png"%(fname, m_idx))
     plt.close()
 
