@@ -1,0 +1,4 @@
+lte-data/nitrogen_thermo_table.dat filter=lfs diff=lfs merge=lfs -text
+lte-data/nitrogen_transp_table.dat filter=lfs diff=lfs merge=lfs -text
+lte-data/nitrogen_e_rev_table.dat filter=lfs diff=lfs merge=lfs -text
+lte-data/nitrogen_ltethermo_lomach_1atm.h5 filter=lfs diff=lfs merge=lfs -text
