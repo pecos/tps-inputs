@@ -22,7 +22,8 @@ print("Nv", Nv)
 
 tt     = list()
 warmup = 3
-gemm   = list() 
+
+binv   = list() 
 
 
 def sync_device():
@@ -32,24 +33,25 @@ def sync_device():
 
 for i in range(len(Nv)):
     for j in range(len(Nc)):
-        A  = xp.random.rand(Nv[i], Nv[i])
-        B  = xp.random.rand(Nv[i], Nc[j])
+        J  = xp.random.rand(Nc[j], Nv[i], Nv[i])
         
         for r_id in range(warmup):
-            C  = xp.dot(A, B)
+            Jinv = xp.linalg.inv(J)
 
-        t1 = time() 
-        C  = xp.dot(A, B)
+        t1   = time() 
+        Jinv = xp.linalg.inv(J)
         sync_device()
-        t2 = time()
+        t2   = time()
         
-        gemm.append((t2-t1))
+        binv.append((t2-t1))
 
-gemm = np.array(gemm).reshape((len(Nv), len(Nc))).T
+
+binv = np.array(binv).reshape((len(Nv), len(Nc))).T
+
+
 t = Texttable()
-t.add_rows([Nv, gemm[0]])
+t.add_rows([Nv, binv[0]])
 print(t.draw())
 
-print("gemm")
-print(gemm)
-
+print("binv")
+print(binv)
