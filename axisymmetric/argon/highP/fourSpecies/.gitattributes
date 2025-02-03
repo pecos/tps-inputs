@@ -4,3 +4,4 @@ rate-coefficients/Recombination_Ground.h5 filter=lfs diff=lfs merge=lfs -text
 rate-coefficients/Recombination_Lumped.h5 filter=lfs diff=lfs merge=lfs -text
 rate-coefficients/Deexcitation_Lumped.h5 filter=lfs diff=lfs merge=lfs -text
 rate-coefficients/Excitation_Lumped.h5 filter=lfs diff=lfs merge=lfs -text
+restart_output-torch.sol.h5 filter=lfs diff=lfs merge=lfs -text
