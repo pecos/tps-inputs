@@ -1,0 +1,7 @@
+output-torch
+output-torch/*
+ParaView
+ParaView/*
+*.mp4
+*.ogv
+partition*
