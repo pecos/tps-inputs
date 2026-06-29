@@ -1,0 +1,33 @@
+This directory contains hdf5 files with NEC data for use in TPS and
+the inputs used to generate those files.
+
+The h5 files where constructed in the following manner.  For T > 4500,
+data were extracted (using WebPlotDigitizer,
+https://apps.automeris.io/wpd/) from Figure 17 in
+
+@article{Y Naghizadeh-Kashani_2002,
+doi = {10.1088/0022-3727/35/22/306},
+url = {https://dx.doi.org/10.1088/0022-3727/35/22/306},
+year = {2002},
+month = {nov},
+publisher = {},
+volume = {35},
+number = {22},
+pages = {2925},
+author = {Y Naghizadeh-Kashani and  Y Cressault and  A Gleizes},
+title = {Net emission coefficient of air thermal plasmas},
+journal = {Journal of Physics D: Applied Physics},
+}
+
+This image is stored here as nitrogen_nec.png, and the data extracted
+are stored in the csv files in this directory.  Because the plot does
+not show results for T < 4500, the data in this region are
+extrapolated using a power law relationship constructed to match the
+lowest temperature behavior.  See the write_nec.py script, which
+performs the extrapolation and writes the full resulting NEC model to
+h5 files for use in TPS.
+
+This low temperature region should not matter much, since the nec is
+very low relative to that at higher temperatures, so it does not play
+much of a role in the power balance.  However, we should probably
+construct our own NEC model to avoid this ad hoc extrapolation.

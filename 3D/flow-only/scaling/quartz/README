@@ -1,0 +1,15 @@
+Remember to
+
+1) Create soft link to your tps executable (i.e., ./tps must be set)
+2) Update FS_MOUNT and CONTAINER_DIR in slurn.N.job for your environment
+3) Adjust the number_of_nodes variable that lists the node counts you want to run
+
+Then, run the bash script
+
+./quartz-submit.sh,
+
+which will simultaneously submit all the jobs for all node counts, but
+with each one depending on the previous (i.e., if you ask for
+number_of_nodes=("1" "2" "4"), then the 1 node job has no dependency,
+the 2 node job depends on the 1 node job, and the 4 node job depends
+on the 2 node job).
